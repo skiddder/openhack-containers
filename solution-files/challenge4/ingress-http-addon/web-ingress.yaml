@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+  name: tripviewer-ingress
+  namespace: web
+spec:
+  rules:
+    - host: {{DNS}}.westus2.aksapp.io
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: tripviewer
+            servicePort: 80
+        - path: /UserProfile
+          backend:
+            serviceName: tripviewer
+            servicePort: 80
+        - path: /Trips
+          backend:
+            serviceName: tripviewer
+            servicePort: 80

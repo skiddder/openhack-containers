@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "value": "ohcontainer"
+        },
+        "location": {
+            "value": "westeurope"
+        },
+        "dnsPrefix": {
+            "value": "ohcontainer"
+        },
+        "agentCount": {
+            "value": 3
+        },
+        "agentVMSize": {
+            "value": "Standard_DS2_v2"
+        },
+        "kubernetesVersion": {
+            "value": "1.19.1"
+        },
+        "networkPlugin": {
+            "value": "azure"
+        },
+        "servicePrincipalClientId": {
+            "value": "dummy"
+        },
+        "servicePrincipalClientSecret": {
+            "value": "dummy"
+        }
+    }
+}

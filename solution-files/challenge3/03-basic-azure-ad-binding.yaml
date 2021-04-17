@@ -1,0 +1,16 @@
+# replace apiGroup.name with the final output of cluster-config.sh
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: contoso-cluster-admins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  # name: sischwin@microsoft.com
+  #name: 7cb2eb4f-37d4-485c-ab5a-822eaae59025 #sischwin@microsoft.com in microsoft.com
+  name: b9e9fc20-223d-4e91-a9ff-f361b46401da #sischwin@microsoft.com in nssimon.com --> use object-id from tenant where you created the server-application!

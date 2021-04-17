@@ -1,0 +1,95 @@
+Name:               prometheus-prom-kube-prometheus-stack-prometheus
+Namespace:          monitoring
+CreationTimestamp:  Sat, 23 Jan 2021 12:19:22 +0100
+Selector:           app=prometheus,operator.prometheus.io/name=prom-kube-prometheus-stack-prometheus,operator.prometheus.io/shard=0,prometheus=prom-kube-prometheus-stack-prometheus
+Labels:             app=kube-prometheus-stack-prometheus
+                    app.kubernetes.io/managed-by=Helm
+                    chart=kube-prometheus-stack-13.2.1
+                    heritage=Helm
+                    operator.prometheus.io/name=prom-kube-prometheus-stack-prometheus
+                    operator.prometheus.io/shard=0
+                    release=prom
+Annotations:        meta.helm.sh/release-name: prom
+                    meta.helm.sh/release-namespace: monitoring
+                    prometheus-operator-input-hash: 1074152091933827859
+Replicas:           1 desired | 1 total
+Update Strategy:    RollingUpdate
+Pods Status:        1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           app=prometheus
+                    operator.prometheus.io/name=prom-kube-prometheus-stack-prometheus
+                    operator.prometheus.io/shard=0
+                    prometheus=prom-kube-prometheus-stack-prometheus
+  Service Account:  prom-kube-prometheus-stack-prometheus
+  Containers:
+   prometheus:
+    Image:      quay.io/prometheus/prometheus:v2.24.0
+    Port:       9090/TCP
+    Host Port:  0/TCP
+    Args:
+      --web.console.templates=/etc/prometheus/consoles
+      --web.console.libraries=/etc/prometheus/console_libraries
+      --config.file=/etc/prometheus/config_out/prometheus.env.yaml
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.retention.time=10d
+      --web.enable-lifecycle
+      --storage.tsdb.no-lockfile
+      --web.external-url=http://prom-kube-prometheus-stack-prometheus.monitoring:9090
+      --web.route-prefix=/
+    Readiness:    http-get http://:web/-/ready delay=0s timeout=3s period=5s #success=1 #failure=120
+    Environment:  <none>
+    Mounts:
+      /etc/prometheus/certs from tls-assets (ro)
+      /etc/prometheus/config_out from config-out (ro)
+      /etc/prometheus/rules/prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0 from prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0 (rw)
+      /prometheus from prometheus-prom-kube-prometheus-stack-prometheus-db (rw,path="prometheus-db")
+   config-reloader:
+    Image:      quay.io/prometheus-operator/prometheus-config-reloader:v0.45.0
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Command:
+      /bin/prometheus-config-reloader
+    Args:
+      --listen-address=:8080
+      --reload-url=http://127.0.0.1:9090/-/reload
+      --config-file=/etc/prometheus/config/prometheus.yaml.gz
+      --config-envsubst-file=/etc/prometheus/config_out/prometheus.env.yaml
+      --watched-dir=/etc/prometheus/rules/prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0
+    Limits:
+      cpu:     100m
+      memory:  50Mi
+    Requests:
+      cpu:     100m
+      memory:  50Mi
+    Environment:
+      POD_NAME:   (v1:metadata.name)
+      SHARD:     0
+    Mounts:
+      /etc/prometheus/config from config (rw)
+      /etc/prometheus/config_out from config-out (rw)
+      /etc/prometheus/rules/prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0 from prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0 (rw)
+  Volumes:
+   config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  prometheus-prom-kube-prometheus-stack-prometheus
+    Optional:    false
+   tls-assets:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  prometheus-prom-kube-prometheus-stack-prometheus-tls-assets
+    Optional:    false
+   config-out:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+   prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      prometheus-prom-kube-prometheus-stack-prometheus-rulefiles-0
+    Optional:  false
+Volume Claims:
+  Name:          prometheus-prom-kube-prometheus-stack-prometheus-db
+  StorageClass:  
+  Labels:        <none>
+  Annotations:   <none>
+  Capacity:      10Gi
+  Access Modes:  [ReadWriteOnce]
+Events:          <none>

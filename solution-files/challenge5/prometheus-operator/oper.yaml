@@ -1,0 +1,54 @@
+Name:                   prom-kube-prometheus-stack-operator
+Namespace:              monitoring
+CreationTimestamp:      Sat, 23 Jan 2021 12:19:14 +0100
+Labels:                 app=kube-prometheus-stack-operator
+                        app.kubernetes.io/managed-by=Helm
+                        chart=kube-prometheus-stack-13.2.1
+                        heritage=Helm
+                        release=prom
+Annotations:            deployment.kubernetes.io/revision: 1
+                        meta.helm.sh/release-name: prom
+                        meta.helm.sh/release-namespace: monitoring
+Selector:               app=kube-prometheus-stack-operator,release=prom
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=kube-prometheus-stack-operator
+                    chart=kube-prometheus-stack-13.2.1
+                    heritage=Helm
+                    release=prom
+  Service Account:  prom-kube-prometheus-stack-operator
+  Containers:
+   kube-prometheus-stack:
+    Image:      quay.io/prometheus-operator/prometheus-operator:v0.45.0
+    Port:       8443/TCP
+    Host Port:  0/TCP
+    Args:
+      --kubelet-service=kube-system/prom-kube-prometheus-stack-kubelet
+      --localhost=127.0.0.1
+      --prometheus-config-reloader=quay.io/prometheus-operator/prometheus-config-reloader:v0.45.0
+      --config-reloader-cpu=100m
+      --config-reloader-memory=50Mi
+      --web.enable-tls=true
+      --web.cert-file=/cert/cert
+      --web.key-file=/cert/key
+      --web.listen-address=:8443
+      --web.tls-min-version=VersionTLS13
+    Environment:  <none>
+    Mounts:
+      /cert from tls-secret (ro)
+  Volumes:
+   tls-secret:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  prom-kube-prometheus-stack-admission
+    Optional:    false
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   prom-kube-prometheus-stack-operator-6c8dbbf674 (1/1 replicas created)
+Events:          <none>

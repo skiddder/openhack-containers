@@ -1,0 +1,126 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerName": {
+            "type": "string",
+            "defaultValue": "teamdeploy"
+        },
+        "imageName": {
+            "type": "string",
+            "defaultValue": "containersv2.azurecr.io/openhack:4002"
+        },
+        "numberCpuCores": {
+            "type": "string",
+            "defaultValue": "1"
+        },
+        "memory": {
+            "type": "string",
+            "defaultValue": "1.5"
+        },
+        "restartPolicy": {
+            "type": "string",
+            "allowedValues": [
+                "OnFailure",
+                "Always",
+                "Never"
+            ],
+            "defaultValue": "Never"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "simulatorLocation": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "registryName": {
+            "type": "securestring",
+            "defaultValue": "containersv2.azurecr.io"
+        },
+        "imageRegistryUsername": {
+            "type": "securestring",
+            "defaultValue": "ad9216eb-4075-4ace-a8f6-ca43a0eeff1f"
+        },
+        "imageRegistryPassword": {
+            "type": "securestring",
+            "defaultValue": "ace15c43-c863-4e1a-80fa-79f50c53b5b9"
+        }
+    },
+    "variables": {
+        "azureUserName": "",
+        "azurePassword": "",
+        "recipientEmail":"",
+        "ChatConnectionString" :"",
+        "ChatMessageQueue":""
+    },
+    "resources": [
+        {
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('containerName')]",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2018-04-01",
+            "properties": {
+                "containers": [
+                    {
+                        "name": "[parameters('containerName')]",
+                        "properties": {
+                            "image": "[parameters('imageName')]",
+                            "resources": {
+                                "requests": {
+                                    "cpu": "[int(parameters('numberCpuCores'))]",
+                                    "memoryInGB": "[float(parameters('memory'))]"
+                                }
+                            },
+                            "environmentVariables": [
+                                {
+                                    "name": "AZUREUSER",
+                                    "value": "[variables('azureUserName')]"
+                                },
+                                {
+                                    "name": "AZUREPASS",
+                                    "value": "[variables('azurePassword')]"
+                                },
+                                {
+                                    "name": "SUBID",
+                                    "value": "[subscription().subscriptionId]"
+                                },
+                                {
+                                    "name": "LOCATION",
+                                    "value": "[parameters('location')]"
+                                },
+                                {
+                                    "name": "SIMULATORLOCATION",
+                                    "value": "[parameters('simulatorLocation')]"
+                                },
+                                {
+                                    "name": "RECIPIENTEMAIL",
+                                    "value": "[variables('recipientEmail')]"
+                                },
+                                {
+                                    "name": "CHATCONNECTIONSTRING",
+                                    "value": "[variables('ChatConnectionString')]"
+                                },
+                                {
+                                    "name": "CHATMSGQUEUE",
+                                    "value": "[variables('ChatMessageQueue')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "imageRegistryCredentials": [
+                    {
+                        "server": "[parameters('registryName')]",
+                        "username": "[parameters('imageRegistryUsername')]",
+                        "password": "[parameters('imageRegistryPassword')]"
+                    }
+                ],
+                "restartPolicy": "[parameters('restartPolicy')]",
+                "osType": "Linux"
+            },
+            "tags": {}
+        }
+    ]
+}

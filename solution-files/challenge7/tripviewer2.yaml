@@ -1,0 +1,45 @@
+apiVersion: apps/v1  
+kind: Deployment  
+metadata:  
+  name: tripviewer
+  labels:
+    app: tripviewer
+spec:  
+  replicas: 1
+  template:
+    metadata:
+      name: tripviewer
+      labels:
+        app: tripviewer
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: tripviewer
+        image: {{registry}}.azurecr.io/tripviewer2:1.0
+        env:
+        - name: WCF_SVC
+          value: "http://wfcsvc.wfcns.svc.cluster.local"
+        - name: USER_SVC
+          value: "http://userprofile.api.svc.cluster.local"
+        - name: TRIPS_SVC
+          value: "http://trips.api.svc.cluster.local"
+        - name: BING_MAPS_KEY
+          value: ""
+        ports:
+          - containerPort: 80
+  selector:
+    matchLabels:
+      app: tripviewer
+---
+apiVersion: v1  
+kind: Service  
+metadata:  
+  name: tripviewer
+spec:  
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: tripviewer

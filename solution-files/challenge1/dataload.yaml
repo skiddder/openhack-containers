@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dataload
+  namespace: default
+  labels:
+    deploy: dataload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dataload
+  template:
+    metadata:
+      labels:
+        app: dataload
+    spec:
+      containers:
+      - image: "openhack/data-load:v1"
+        imagePullPolicy: Always
+        name: dataload
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        env:
+          - name: SQLFQDN
+            value: 'sqlservervnb0999.database.windows.net'
+          - name: SQLUSER
+            value: 'sqladminvNb0999'
+          - name: SQLPASS
+            value: 'vX6gw9Ec6'
+          - name: SQLDB
+            value: 'mydrivingDB'

@@ -1,0 +1,22 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentity
+metadata:
+  name: api-keyvault
+  namespace: api-dev
+  annotations:
+    aadpodidentity.k8s.io/Behavior: namespaced
+spec:
+  type: 0 # 0 - user assigned MSI, 1 - service principal
+  ResourceID: {{keyvault resource id}}
+  ClientId: {{MSI/SP client id}}
+
+---
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentityBinding
+metadata:
+  name: keyvault-identitybinding
+  namespace: api-dev
+spec:
+  AzureIdentity: api-keyvault
+  # Selector must match selector of format "aadpodidbinding: <selector>" on deployment
+  Selector: {{selector to match deployment on}}

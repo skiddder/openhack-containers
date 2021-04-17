@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "value": "ohcontainer"
+        },
+        "location": {
+            "value": "westeurope"
+        },
+        "dnsPrefix": {
+            "value": "ohcontainer-dns"
+        },
+        "kubernetesVersion": {
+            "value": "1.18.10"
+        },
+        "networkPlugin": {
+            "value": "azure"
+        },
+        "enableRBAC": {
+            "value": true
+        },
+        "enablePrivateCluster": {
+            "value": false
+        },
+        "enableHttpApplicationRouting": {
+            "value": false
+        },
+        "enableAzurePolicy": {
+            "value": true
+        },
+        "vmssNodePool": {
+            "value": true
+        },
+        "vnetSubnetID": {
+            "value": "/subscriptions/48006515-4d68-4a94-84a2-69da5d351c6f/resourceGroups/oh-container-rg/providers/Microsoft.Network/virtualNetworks/ohcontainer-vnet/subnets/ingress"
+        },
+        "serviceCidr": {
+            "value": "172.16.0.1/24"
+        },
+        "dnsServiceIP": {
+            "value": "172.16.0.10"
+        },
+        "dockerBridgeCidr": {
+            "value": "172.17.0.1/16"
+        },
+        "workspaceName": {
+            "value": "nslz-weu-la"
+        },
+        "omsWorkspaceId": {
+            "value": "/subscriptions/48006515-4d68-4a94-84a2-69da5d351c6f/resourcegroups/nslz-weu-mgmt/providers/microsoft.operationalinsights/workspaces/nslz-weu-la"
+        },
+        "workspaceRegion": {
+            "value": "westeurope"
+        },
+        "acrName": {
+            "value": "ohcontainer"
+        },
+        "acrResourceGroup": {
+            "value": "oh-container-rg"
+        }
+    }
+}
